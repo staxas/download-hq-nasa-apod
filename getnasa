@@ -1,6 +1,13 @@
 #!/bin/bash
 
-cd /home/username/nasa
+cd /home/edwin/nasa
 
-curl https://apod.nasa.gov/apod.rss | grep -E "http.*\.html" | sed "s/.*\(http.*\.html\).*/\1/" | xargs curl | grep -o '<a href="[^"]*' | grep -o '[^"]*.jpg$' | awk '{print "https:\/\/apod.nasa.gov\/apod\/"$1}' | xargs wget -N
-
+data=$(curl https://apod.nasa.gov/apod.rss | grep -E "http.*\.html" | sed "s/.*\(http.*\.html\).*/\1/" | xargs curl | grep -o '<a href="[^"]*' | grep -o '[^"]*.jpg$')
+for link in $data
+do
+  if [[ ${link:0:4} != "http" ]]; then
+     $(echo "$link" | awk '{print "https:\/\/apod.nasa.gov\/apod\/"$1}' | xargs wget -N)
+  else
+    $(echo "$link" | xargs wget -N)
+  fi
+done
