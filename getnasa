@@ -6,7 +6,7 @@ data=$(curl https://apod.nasa.gov/apod.rss | grep -E "http.*\.html" | sed "s/.*\
 for link in $data
 do
   if [[ ${link:0:4} != "http" ]]; then
-     $(echo "$link" | awk '{print "https:\/\/apod.nasa.gov\/apod\/"$1}' | xargs wget -N)
+    $(echo "$link" | awk '{print "https:\/\/apod.nasa.gov\/apod\/"$1}' | xargs wget -N)
   else
     $(echo "$link" | xargs wget -N)
   fi
